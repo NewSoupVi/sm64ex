@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include "Archipelago.h"
+
 #include <ultra64.h>
 #include "sm64.h"
 #include "game_init.h"
@@ -507,21 +510,25 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
             if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_1 | SAVE_FLAG_UNLOCKED_BASEMENT_DOOR))) {
                 save_file_set_flags(SAVE_FLAG_HAVE_KEY_1);
             }
+            SM64AP_SendItem(SM64AP_ITEMID_KEY1 - SM64AP_ID_OFFSET);
             break;
 
         case LEVEL_BOWSER_2:
             if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) {
                 save_file_set_flags(SAVE_FLAG_HAVE_KEY_2);
             }
+            SM64AP_SendItem(SM64AP_ITEMID_KEY2 - SM64AP_ID_OFFSET);
             break;
 
         case LEVEL_BOWSER_3:
+            SM64AP_StoryComplete();
             break;
 
         default:
             if (!(save_file_get_star_flags(fileIndex, courseIndex) & starFlag)) {
                 save_file_set_star_flags(fileIndex, courseIndex, starFlag);
             }
+            SM64AP_SendItem((courseIndex == -1 ? (10+15-1)*7 : courseIndex*7) + starIndex);
             break;
     }
 }
@@ -571,15 +578,7 @@ s32 save_file_get_course_star_count(s32 fileIndex, s32 courseIndex) {
 }
 
 s32 save_file_get_total_star_count(s32 fileIndex, s32 minCourse, s32 maxCourse) {
-    s32 count = 0;
-
-    // Get standard course star count.
-    for (; minCourse <= maxCourse; minCourse++) {
-        count += save_file_get_course_star_count(fileIndex, minCourse);
-    }
-
-    // Add castle secret star count.
-    return save_file_get_course_star_count(fileIndex, -1) + count;
+    return SM64AP_GetStars();
 }
 
 void save_file_set_flags(u32 flags) {

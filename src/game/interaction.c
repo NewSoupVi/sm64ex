@@ -1,5 +1,6 @@
 #include <PR/ultratypes.h>
 
+#include "../Archipelago.h"
 #include "area.h"
 #include "actors/common1.h"
 #include "audio/external.h"
@@ -894,10 +895,10 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
 
     if (m->action == ACT_WALKING || m->action == ACT_DECELERATING) {
         if (warpDoorId == 1 && !(saveFlags & SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) {
-            if (!(saveFlags & SAVE_FLAG_HAVE_KEY_2)) {
+            if (!SM64AP_HaveKey2()) {
                 if (!sDisplayingDoorText) {
                     set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG,
-                                     (saveFlags & SAVE_FLAG_HAVE_KEY_1) ? DIALOG_023 : DIALOG_022);
+                                     SM64AP_HaveKey1() ? DIALOG_023 : DIALOG_022);
                 }
                 sDisplayingDoorText = TRUE;
 
@@ -908,11 +909,11 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
         }
 
         if (warpDoorId == 2 && !(saveFlags & SAVE_FLAG_UNLOCKED_BASEMENT_DOOR)) {
-            if (!(saveFlags & SAVE_FLAG_HAVE_KEY_1)) {
+            if (!SM64AP_HaveKey1()) {
                 if (!sDisplayingDoorText) {
                     // Moat door skip was intended confirmed
                     set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG,
-                                     (saveFlags & SAVE_FLAG_HAVE_KEY_2) ? DIALOG_023 : DIALOG_022);
+                                     SM64AP_HaveKey2() ? DIALOG_023 : DIALOG_022);
                 }
                 sDisplayingDoorText = TRUE;
 
