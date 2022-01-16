@@ -1029,7 +1029,7 @@ $(BUILD_DIR)/%.o: %.s
 	$(AS) $(ASFLAGS) -MD $(BUILD_DIR)/$*.d -o $@ $<
 
 lib/IXWebSocket/build/libixwebsocket.a:
-	cd lib/IXWebSocket && mkdir -p build && cd build && cmake .. && $(MAKE)
+	cd lib/IXWebSocket && mkdir -p build && cd build && cmake .. -G"Unix Makefiles" && $(MAKE)
 
 $(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(BUILD_DIR)/$(RPC_LIBS) lib/IXWebSocket/build/libixwebsocket.a
 	$(LD) -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) -ljsoncpp lib/IXWebSocket/build/libixwebsocket.a -lz $(WINNETLIB)
