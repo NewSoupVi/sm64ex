@@ -7,8 +7,7 @@ extern "C" {
 
 #include <deque>
 #include <string>
-#include <chrono>
-#include <cstdlib>
+#include <vector>
 
 int starsCollected = 0;
 bool sm64_have_key1 = false;
@@ -16,7 +15,7 @@ bool sm64_have_key2 = false;
 bool sm64_have_wingcap = false;
 bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
-int msg_frame_duration = 90; // 4 Secounds at 30F/s
+int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration; 
 
 void SM64AP_RecvItem(int idx);
@@ -114,18 +113,15 @@ void SM64AP_DeathLinkSend() {
 }
 
 void SM64AP_PrintNext() {
-    if (AP_GetMsgQueue().empty()) return;
-    int amount = AP_GetMsgQueue().front().second;
-    for (int i = 0; i <= amount; i++) {
-        print_text(-60, (amount-i)*20, AP_GetMsgQueue().at(i).first.c_str());
+    if (!AP_IsMessagePending()) return;
+    std::vector<std::string> msg = AP_GetLatestMessage();
+    for (int i = 0; i < msg.size(); i++) {
+        print_text(-60, (msg.size()-i)*20, msg.at(i).c_str());
     }
     if (cur_msg_frame_duration > 0) {
         cur_msg_frame_duration--;
     } else {
-        for (int i = 0; i <= amount; i++) {
-            AP_GetMsgQueue().pop_front();
-        }
-        AP_GetMsgQueue().shrink_to_fit();
+        AP_ClearLatestMessage();
         cur_msg_frame_duration = msg_frame_duration;
     }
 }
