@@ -293,7 +293,6 @@ EXE := $(BUILD_DIR)/$(TARGET).html
 	else
 	ifeq ($(WINDOWS_BUILD),1)
 		EXE := $(BUILD_DIR)/$(TARGET).exe
-		WINNETLIB := -lws2_32
 
 		else # Linux builds/binary namer
 		ifeq ($(TARGET_RPI),1)
@@ -1028,11 +1027,12 @@ $(BUILD_DIR)/%.o: $(BUILD_DIR)/%.c
 $(BUILD_DIR)/%.o: %.s
 	$(AS) $(ASFLAGS) -MD $(BUILD_DIR)/$*.d -o $@ $<
 
-lib/APCpp/build/libAPCpp-bundled.a:
+lib/APCpp/build/lib/libAPCpp.so:
 	cd lib/APCpp && mkdir -p build && cd build && cmake .. -G"Unix Makefiles" && $(MAKE)
 
-$(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(BUILD_DIR)/$(RPC_LIBS) lib/APCpp/build/libAPCpp-bundled.a
-	$(LD) -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) -ljsoncpp lib/APCpp/build/libAPCpp-bundled.a -lz $(WINNETLIB)
+$(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(BUILD_DIR)/$(RPC_LIBS) lib/APCpp/build/lib/libAPCpp.so
+	$(LD) -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) lib/APCpp/build/lib/libAPCpp.so -Wl,-rpath,. 
+	cp lib/APCpp/build/lib/libAPCpp.so $(BUILD_DIR)
 
 .PHONY: all clean distclean default diff test load libultra res
 .PRECIOUS: $(BUILD_DIR)/bin/%.elf $(SOUND_BIN_DIR)/%.ctl $(SOUND_BIN_DIR)/%.tbl $(SOUND_SAMPLE_TABLES) $(SOUND_BIN_DIR)/%.s $(BUILD_DIR)/%
