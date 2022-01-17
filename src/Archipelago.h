@@ -6,6 +6,9 @@
 #define SM64AP_ITEMID_STAR SM64AP_ID_OFFSET
 #define SM64AP_ITEMID_KEY1 (SM64AP_ID_OFFSET+178)
 #define SM64AP_ITEMID_KEY2 (SM64AP_ITEMID_KEY1+1)
+#define SM64AP_ITEMID_WINGCAP (SM64AP_ITEMID_KEY2+1)
+#define SM64AP_ITEMID_METALCAP (SM64AP_ITEMID_WINGCAP+1)
+#define SM64AP_ITEMID_VANISHCAP (SM64AP_ITEMID_METALCAP+1)
 
 #ifdef __cplusplus
 extern "C" void SM64AP_Init(const char* ip, const char* player_name, const char* passwd);
@@ -20,15 +23,17 @@ extern "C" void SM64AP_SendItem(int);
 void SM64AP_SendItem(int);
 #endif
 
-// Local Stars and Keys
+// Local Stars, Keys and Caps
 #ifdef __cplusplus
 extern "C" int SM64AP_GetStars();
 extern "C" bool SM64AP_HaveKey1();
 extern "C" bool SM64AP_HaveKey2();
+extern "C" bool SM64AP_HaveCap(int);
 #else
 int SM64AP_GetStars();
 bool SM64AP_HaveKey1();
 bool SM64AP_HaveKey2();
+bool SM64AP_HaveCap(int);
 #endif
 
 // Print Next Message to Screen

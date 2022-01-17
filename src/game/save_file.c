@@ -582,6 +582,17 @@ s32 save_file_get_total_star_count(s32 fileIndex, s32 minCourse, s32 maxCourse) 
 }
 
 void save_file_set_flags(u32 flags) {
+    switch (flags) {
+        case 2:
+            SM64AP_SendItem(SM64AP_ITEMID_WINGCAP - SM64AP_ID_OFFSET);
+            break;
+        case 4:
+            SM64AP_SendItem(SM64AP_ITEMID_METALCAP - SM64AP_ID_OFFSET);
+            break;
+        case 8:
+            SM64AP_SendItem(SM64AP_ITEMID_VANISHCAP - SM64AP_ID_OFFSET);
+            break;
+    }
     gSaveBuffer.files[gCurrSaveFileNum - 1][0].flags |= (flags | SAVE_FLAG_FILE_EXISTS);
     gSaveFileModified = TRUE;
 }

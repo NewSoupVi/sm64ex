@@ -1,5 +1,7 @@
 // exclamation_box.c.inc
 
+#include "../../Archipelago.h"
+
 struct ObjectHitbox sExclamationBoxHitbox = {
     /* interactType: */ INTERACT_BREAKABLE,
     /* downOffset: */ 5,
@@ -38,7 +40,7 @@ void bhv_rotating_exclamation_box_loop(void) {
 void exclamation_box_act_0(void) {
     if (o->oBehParams2ndByte < 3) {
         o->oAnimState = o->oBehParams2ndByte;
-        if ((save_file_get_flags() & D_8032F0C0[o->oBehParams2ndByte])
+        if (SM64AP_HaveCap(D_8032F0C0[o->oBehParams2ndByte])
             || ((o->oBehParams >> 24) & 0xFF) != 0)
             o->oAction = 2;
         else
@@ -55,7 +57,7 @@ void exclamation_box_act_1(void) {
         spawn_object(o, MODEL_EXCLAMATION_POINT, bhvRotatingExclamationMark);
         cur_obj_set_model(MODEL_EXCLAMATION_BOX_OUTLINE);
     }
-    if ((save_file_get_flags() & D_8032F0C0[o->oBehParams2ndByte])
+    if (SM64AP_HaveCap(D_8032F0C0[o->oBehParams2ndByte])
         || ((o->oBehParams >> 24) & 0xFF) != 0) {
         o->oAction = 2;
         cur_obj_set_model(MODEL_EXCLAMATION_BOX);

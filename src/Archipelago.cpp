@@ -29,6 +29,9 @@ int sm64ap_uuid = 0;
 int starsCollected = 0;
 bool sm64_have_key1 = false;
 bool sm64_have_key2 = false;
+bool sm64_have_wingcap = false;
+bool sm64_have_metalcap = false;
+bool sm64_have_vanishcap = false;
 int msg_frame_duration = 90; // 4 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration; 
 std::deque<std::pair<std::string,int>> messageQueue;
@@ -118,6 +121,23 @@ bool SM64AP_HaveKey2() {
     return sm64_have_key2;
 }
 
+bool SM64AP_HaveCap(int flag) {
+    switch (flag) {
+        case 2:
+            return sm64_have_wingcap;
+            break;
+        case 4:
+            return sm64_have_metalcap;
+            break;
+        case 8:
+            return sm64_have_vanishcap;
+            break;
+        default:
+            //Probably coin/1up or something
+            return true;
+    }
+}
+
 bool SM64AP_DeathLinkRecv() {
     return false;
 }
@@ -174,6 +194,9 @@ bool parse_response(std::string msg, std::string &request) {
             // Avoid inconsistency if we disconnected before
             sm64_have_key1 = false;
             sm64_have_key2 = false;
+            sm64_have_wingcap = false;
+            sm64_have_metalcap = false;
+            sm64_have_vanishcap = false;
             starsCollected = 0;
 
             printf("SM64AP: Authenticated\n");
@@ -229,19 +252,29 @@ bool parse_response(std::string msg, std::string &request) {
                     case SM64AP_ITEMID_STAR:
                         starsCollected++;
                         ADD_TO_MSGQUEUE("Star received", 1);
-                        ADD_TO_MSGQUEUE(("From " + map_player_id_name.at(root[i]["items"][j]["player"].asInt())), 0);
                         break;
                     case SM64AP_ITEMID_KEY1:
                         sm64_have_key1 = true;
                         ADD_TO_MSGQUEUE("Cellar Key received", 1);
-                        ADD_TO_MSGQUEUE(("From " + map_player_id_name.at(root[i]["items"][j]["player"].asInt())), 0);
                         break;
                     case SM64AP_ITEMID_KEY2:
                         sm64_have_key2 = true;
                         ADD_TO_MSGQUEUE("Second Floor Key received", 1);
-                        ADD_TO_MSGQUEUE(("From " + map_player_id_name.at(root[i]["items"][j]["player"].asInt())), 0);
+                        break;
+                    case SM64AP_ITEMID_WINGCAP:
+                        sm64_have_wingcap = true;
+                        ADD_TO_MSGQUEUE("Wing Cap received", 1);
+                        break;
+                    case SM64AP_ITEMID_METALCAP:
+                        sm64_have_metalcap = true;
+                        ADD_TO_MSGQUEUE("Metal Cap received", 1);
+                        break;
+                    case SM64AP_ITEMID_VANISHCAP:
+                        sm64_have_vanishcap = true;
+                        ADD_TO_MSGQUEUE("Vanish Cap received", 1);
                         break;
                 }
+                ADD_TO_MSGQUEUE(("From " + map_player_id_name.at(root[i]["items"][j]["player"].asInt())), 0);
             }
         } else if (!strcmp(cmd, "RoomUpdate")) {
             for (unsigned int j = 0; j < root[i]["checked_locations"].size(); j++) {
