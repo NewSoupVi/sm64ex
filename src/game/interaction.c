@@ -1,6 +1,6 @@
 #include <PR/ultratypes.h>
 
-#include "../Archipelago.h"
+#include "../sm64ap.h"
 #include "area.h"
 #include "actors/common1.h"
 #include "audio/external.h"

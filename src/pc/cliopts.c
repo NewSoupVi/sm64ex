@@ -1,6 +1,6 @@
 #include "cliopts.h"
 
-#include "../Archipelago.h"
+#include "../sm64ap.h"
 #include "configfile.h"
 #include "cheats.h"
 #include "pc_main.h"

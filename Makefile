@@ -457,7 +457,7 @@ DEP_FILES := $(O_FILES:.o=.d) $(ULTRA_O_FILES:.o=.d) $(GODDARD_O_FILES:.o=.d) $(
 SEG_FILES := $(SEGMENT_ELF_FILES) $(ACTOR_ELF_FILES) $(LEVEL_ELF_FILES)
 
 ##################### Compiler Options #######################
-INCLUDE_CFLAGS := -I include -I lib/IXWebSocket -I $(BUILD_DIR) -I $(BUILD_DIR)/include -I src -I .
+INCLUDE_CFLAGS := -I include -I lib/APCpp -I $(BUILD_DIR) -I $(BUILD_DIR)/include -I src -I .
 ENDIAN_BITWIDTH := $(BUILD_DIR)/endian-and-bitwidth
 
 # Huge deleted N64 section was here
@@ -758,7 +758,7 @@ endif
 
 clean:
 	$(RM) -r $(BUILD_DIR_BASE)
-	$(RM) -r lib/IXWebSocket/build
+	$(RM) -r lib/APCpp/build
 
 cleantools:
 	$(MAKE) -s -C tools clean
@@ -1028,11 +1028,11 @@ $(BUILD_DIR)/%.o: $(BUILD_DIR)/%.c
 $(BUILD_DIR)/%.o: %.s
 	$(AS) $(ASFLAGS) -MD $(BUILD_DIR)/$*.d -o $@ $<
 
-lib/IXWebSocket/build/libixwebsocket.a:
-	cd lib/IXWebSocket && mkdir -p build && cd build && cmake .. -G"Unix Makefiles" && $(MAKE)
+lib/APCpp/build/libAPCpp-bundled.a:
+	cd lib/APCpp && mkdir -p build && cd build && cmake .. -G"Unix Makefiles" && $(MAKE)
 
-$(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(BUILD_DIR)/$(RPC_LIBS) lib/IXWebSocket/build/libixwebsocket.a
-	$(LD) -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) -ljsoncpp lib/IXWebSocket/build/libixwebsocket.a -lz $(WINNETLIB)
+$(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(BUILD_DIR)/$(RPC_LIBS) lib/APCpp/build/libAPCpp-bundled.a
+	$(LD) -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) -ljsoncpp lib/APCpp/build/libAPCpp-bundled.a -lz $(WINNETLIB)
 
 .PHONY: all clean distclean default diff test load libultra res
 .PRECIOUS: $(BUILD_DIR)/bin/%.elf $(SOUND_BIN_DIR)/%.ctl $(SOUND_BIN_DIR)/%.tbl $(SOUND_SAMPLE_TABLES) $(SOUND_BIN_DIR)/%.s $(BUILD_DIR)/%

@@ -1,6 +1,6 @@
 // exclamation_box.c.inc
 
-#include "../../Archipelago.h"
+#include "../../sm64ap.h"
 
 struct ObjectHitbox sExclamationBoxHitbox = {
     /* interactType: */ INTERACT_BREAKABLE,

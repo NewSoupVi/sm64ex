@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "Archipelago.h"
+#include "sm64ap.h"
 
 #include <ultra64.h>
 #include "sm64.h"

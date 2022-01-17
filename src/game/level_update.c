@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <stdbool.h>
 
-#include "Archipelago.h"
+#include "sm64ap.h"
 #include "sm64.h"
 #include "seq_ids.h"
 #include "dialog_ids.h"

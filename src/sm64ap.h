@@ -1,5 +1,3 @@
-#pragma once
-
 #include <stdbool.h>
 
 #define SM64AP_ID_OFFSET 3626000
@@ -10,13 +8,14 @@
 #define SM64AP_ITEMID_METALCAP (SM64AP_ITEMID_WINGCAP+1)
 #define SM64AP_ITEMID_VANISHCAP (SM64AP_ITEMID_METALCAP+1)
 
+//Init
 #ifdef __cplusplus
-extern "C" void SM64AP_Init(const char* ip, const char* player_name, const char* passwd);
+extern "C" void SM64AP_Init(const char*, const char*, const char*);
 #else
 void SM64AP_Init(const char*, const char*, const char*);
 #endif
 
-// Sends LocationCheck for given index
+// Send Item
 #ifdef __cplusplus
 extern "C" void SM64AP_SendItem(int);
 #else
@@ -42,15 +41,6 @@ extern "C" void SM64AP_PrintNext();
 #else
 void SM64AP_PrintNext();
 #endif
-
-// DeathLink functions
-void SM64AP_DeathLinkSend();
-bool SM64AP_DeathLinkRecv();
-void SM64AP_DeathLinkClear();
-
-// Differentiate locations and stars
-const bool* SM64AP_Locations();
-const bool* SM64AP_Stars();
 
 // Called when Story completed, sends StatusUpdate
 #ifdef __cplusplus
