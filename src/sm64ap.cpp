@@ -19,6 +19,7 @@ int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration; 
 
 void SM64AP_RecvItem(int idx);
+void none(int) {};
 
 void SM64AP_ResetItems() {
     sm64_have_key1 = false;
@@ -36,6 +37,7 @@ void SM64AP_Init(const char* ip, const char* player_name, const char* passwd) {
 
     AP_Init(ip, "Super Mario 64", player_name, passwd);
     AP_SetItemClearCallback(&SM64AP_ResetItems);
+    AP_SetLocationCheckedCallback(&none);
     AP_SetItemRecvCallback(&SM64AP_RecvItem);
     AP_Start();
 }
