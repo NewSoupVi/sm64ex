@@ -293,7 +293,7 @@ EXE := $(BUILD_DIR)/$(TARGET).html
 	else
 	ifeq ($(WINDOWS_BUILD),1)
 		EXE := $(BUILD_DIR)/$(TARGET).exe
-		CMAKE_WIN_BUILD_FLAG := -DWIN32=1
+		CMAKE_WIN_BUILD_FLAG := -DMINGW=1
 		else # Linux builds/binary namer
 		ifeq ($(TARGET_RPI),1)
 			EXE := $(BUILD_DIR)/$(TARGET).arm
