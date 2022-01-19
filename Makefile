@@ -475,19 +475,7 @@ else
   CXX := emcc
 endif
 
-LD := $(CC)
-
-ifeq ($(DISCORDRPC),1)
-  LD := $(CXX)
-else ifeq ($(WINDOWS_BUILD),1)
-  ifeq ($(CROSS),i686-w64-mingw32.static-) # fixes compilation in MXE on Linux and WSL
-    LD := $(CC)
-  else ifeq ($(CROSS),x86_64-w64-mingw32.static-)
-    LD := $(CC)
-  else
-    LD := $(CXX)
-  endif
-endif
+LD := $(CXX)
 
 ifeq ($(WINDOWS_BUILD),1) # fixes compilation in MXE on Linux and WSL
   CPP := cpp -P
@@ -684,8 +672,7 @@ else
     LDFLAGS += -Wl,-rpath .
   endif
 
-endif # End of LDFLAGS,almost
-LDFLAGS += -lstdc++
+endif # End of LDFLAGS
 
 # Prevent a crash with -sopt
 export LANG := C
