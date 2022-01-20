@@ -10,6 +10,7 @@ extern "C" {
 #include <vector>
 
 int starsCollected = 0;
+bool sm64_locations[SM64AP_NUM_LOCS];
 bool sm64_have_key1 = false;
 bool sm64_have_key2 = false;
 bool sm64_have_wingcap = false;
@@ -17,34 +18,6 @@ bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration; 
-
-void SM64AP_RecvItem(int idx);
-void none(int) {};
-
-void SM64AP_ResetItems() {
-    sm64_have_key1 = false;
-    sm64_have_key2 = false;
-    sm64_have_wingcap = false;
-    sm64_have_metalcap = false;
-    sm64_have_vanishcap = false;
-    starsCollected = 0;
-}
-
-void SM64AP_Init(const char* ip, const char* player_name, const char* passwd) {
-    if (AP_IsInit()) {
-        return;
-    }
-
-    AP_Init(ip, "Super Mario 64", player_name, passwd);
-    AP_SetItemClearCallback(&SM64AP_ResetItems);
-    AP_SetLocationCheckedCallback(&none);
-    AP_SetItemRecvCallback(&SM64AP_RecvItem);
-    AP_Start();
-}
-
-void SM64AP_SendItem(int idxNoOffset) {
-    AP_SendItem(idxNoOffset + SM64AP_ID_OFFSET);
-}
 
 void SM64AP_RecvItem(int idx) {
     switch (idx) {
@@ -67,6 +40,51 @@ void SM64AP_RecvItem(int idx) {
             sm64_have_vanishcap = true;
             break;
     }
+}
+
+void SM64AP_CheckLocation(int loc_id) {
+    if (loc_id > SM64AP_ID_OFFSET+104) { // Check if irrelevant location
+        return;
+    }
+    sm64_locations[loc_id - SM64AP_ID_OFFSET] = true;
+}
+
+u32 SM64AP_CourseStarFlags(s32 courseIdx) {
+    u32 starflags = 0;
+    for (int i = 0; i < 7; i++) {
+        if (sm64_locations[i + (courseIdx*7)]) {
+            starflags |= (1 << i);
+        }
+    }
+    return starflags;
+}
+
+void SM64AP_ResetItems() {
+    for (int i = 0; i < SM64AP_NUM_LOCS; i++) {
+        sm64_locations[i] = false;
+    }
+    sm64_have_key1 = false;
+    sm64_have_key2 = false;
+    sm64_have_wingcap = false;
+    sm64_have_metalcap = false;
+    sm64_have_vanishcap = false;
+    starsCollected = 0;
+}
+
+void SM64AP_Init(const char* ip, const char* player_name, const char* passwd) {
+    if (AP_IsInit()) {
+        return;
+    }
+
+    AP_Init(ip, "Super Mario 64", player_name, passwd);
+    AP_SetItemClearCallback(&SM64AP_ResetItems);
+    AP_SetLocationCheckedCallback(&SM64AP_CheckLocation);
+    AP_SetItemRecvCallback(&SM64AP_RecvItem);
+    AP_Start();
+}
+
+void SM64AP_SendItem(int idxNoOffset) {
+    AP_SendItem(idxNoOffset + SM64AP_ID_OFFSET);
 }
 
 void SM64AP_StoryComplete() {

@@ -620,7 +620,12 @@ u32 save_file_get_star_flags(s32 fileIndex, s32 courseIndex) {
     if (courseIndex == -1) {
         starFlags = (gSaveBuffer.files[fileIndex][0].flags >> 24) & 0x7F;
     } else {
-        starFlags = gSaveBuffer.files[fileIndex][0].courseStars[courseIndex] & 0x7F;
+        if (courseIndex > 14) {
+            starFlags = gSaveBuffer.files[fileIndex][0].courseStars[courseIndex] & 0x7F;
+        } else {
+            starFlags = SM64AP_CourseStarFlags(courseIndex);
+        }
+        
     }
 
     return starFlags;
