@@ -1018,7 +1018,7 @@ lib/APCpp/build/libAPCpp.so:
 	cd lib/APCpp && mkdir -p build && cd build && CXX=$(CXX) cmake .. $(CMAKE_WIN_BUILD_FLAG) -G"Unix Makefiles" && CXX=$(CXX) $(MAKE)
 
 $(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(BUILD_DIR)/$(RPC_LIBS) lib/APCpp/build/libAPCpp.so
-	$(LD) -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) lib/APCpp/build/libAPCpp.so -Wl,-rpath,. 
+	$(LD) -static -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) lib/APCpp/build/libAPCpp.so -Wl,-rpath,. 
 	cp lib/APCpp/build/libAPCpp.so $(BUILD_DIR)
 
 .PHONY: all clean distclean default diff test load libultra res
