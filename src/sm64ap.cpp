@@ -16,6 +16,7 @@ bool sm64_have_key2 = false;
 bool sm64_have_wingcap = false;
 bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
+int sm64_starstofinish = 70;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration; 
 
@@ -56,6 +57,10 @@ u32 SM64AP_CourseStarFlags(s32 courseIdx) {
     return starflags;
 }
 
+void SM64AP_SetStarsToFinish(int amount) {
+    sm64_starstofinish = amount;
+}
+
 void SM64AP_ResetItems() {
     for (int i = 0; i < SM64AP_NUM_LOCS; i++) {
         sm64_locations[i] = false;
@@ -77,6 +82,7 @@ void SM64AP_Init(const char* ip, const char* player_name, const char* passwd) {
     AP_SetItemClearCallback(&SM64AP_ResetItems);
     AP_SetLocationCheckedCallback(&SM64AP_CheckLocation);
     AP_SetItemRecvCallback(&SM64AP_RecvItem);
+    AP_RegisterSlotDataIntCallback("StarsToFinish", &SM64AP_SetStarsToFinish);
     AP_Start();
 }
 
@@ -90,6 +96,10 @@ void SM64AP_StoryComplete() {
 
 int SM64AP_GetStars() {
     return starsCollected;
+}
+
+int SM64AP_StarsToFinish() {
+    return sm64_starstofinish;
 }
 
 bool SM64AP_CheckedKey1() {

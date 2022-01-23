@@ -24,6 +24,7 @@ extern "C" void SM64AP_Init(const char*, const char*, const char*);
 
 // Local Stars, Keys and Caps
 extern "C" int SM64AP_GetStars();
+extern "C" int SM64AP_StarsToFinish();
 extern "C" u32 SM64AP_CourseStarFlags(s32);
 extern "C" bool SM64AP_CheckedKey1();
 extern "C" bool SM64AP_HaveKey1();
@@ -42,6 +43,7 @@ extern "C" void SM64AP_StoryComplete();
 #else
 void SM64AP_Init(const char*, const char*, const char*);
 int SM64AP_GetStars();
+int SM64AP_StarsToFinish();
 u32 SM64AP_CourseStarFlags(s32);
 bool SM64AP_CheckedKey1();
 bool SM64AP_HaveKey1();

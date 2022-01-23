@@ -534,7 +534,7 @@ void check_instant_warp(void) {
     struct Surface *floor;
 
     if (gCurrLevelNum == LEVEL_CASTLE
-        && save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 70) {
+        && save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= SM64AP_StarsToFinish()) {
         return;
     }
 
