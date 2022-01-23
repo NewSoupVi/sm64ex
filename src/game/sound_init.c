@@ -1,5 +1,7 @@
 #include <ultra64.h>
 
+#include "../sm64ap.h"
+
 #include "area.h"
 #include "audio/external.h"
 #include "engine/graph_node.h"
@@ -179,7 +181,7 @@ void play_infinite_stairs_music(void) {
     u8 shouldPlay = FALSE;
 
     /* Infinite stairs? */
-    if (gCurrLevelNum == LEVEL_CASTLE && gCurrAreaIndex == 2 && gMarioState->numStars < 70) {
+    if (gCurrLevelNum == LEVEL_CASTLE && gCurrAreaIndex == 2 && SM64AP_GetStars() < 70) {
         if (gMarioState->floor != NULL && gMarioState->floor->room == 6) {
             if (gMarioState->pos[2] < 2540.0f) {
                 shouldPlay = TRUE;

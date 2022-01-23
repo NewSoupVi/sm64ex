@@ -1,3 +1,5 @@
+#include "../../sm64ap.h"
+
 struct RacingPenguinData {
     s16 text;
     f32 radius;
@@ -10,7 +12,7 @@ static struct RacingPenguinData sRacingPenguinData[] = {
 };
 
 void bhv_racing_penguin_init(void) {
-    if (gMarioState->numStars == 120) {
+    if (SM64AP_GetStars() == 120) {
         cur_obj_scale(8.0f);
         o->header.gfx.scale[1] = 5.0f;
         o->oBehParams2ndByte = 1;
