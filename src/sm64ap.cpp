@@ -43,9 +43,6 @@ void SM64AP_RecvItem(int idx) {
 }
 
 void SM64AP_CheckLocation(int loc_id) {
-    if (loc_id > SM64AP_ID_OFFSET+104) { // Check if irrelevant location
-        return;
-    }
     sm64_locations[loc_id - SM64AP_ID_OFFSET] = true;
 }
 
@@ -95,8 +92,16 @@ int SM64AP_GetStars() {
     return starsCollected;
 }
 
+bool SM64AP_CheckedKey1() {
+    return sm64_locations[SM64AP_ITEMID_KEY1 - SM64AP_ID_OFFSET];
+}
+
 bool SM64AP_HaveKey1() {
     return sm64_have_key1;
+}
+
+bool SM64AP_CheckedKey2() {
+    return sm64_locations[SM64AP_ITEMID_KEY2 - SM64AP_ID_OFFSET];
 }
 
 bool SM64AP_HaveKey2() {
