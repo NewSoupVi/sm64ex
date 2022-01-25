@@ -3,6 +3,7 @@
 
 extern "C" {
     #include "game/print.h"
+    #include "gfx_dimensions.h"
 }
 
 #include <deque>
@@ -151,7 +152,7 @@ void SM64AP_PrintNext() {
     if (!AP_IsMessagePending()) return;
     std::vector<std::string> msg = AP_GetLatestMessage();
     for (int i = 0; i < msg.size(); i++) {
-        print_text(-60, (msg.size()-i)*20, msg.at(i).c_str());
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0), (msg.size()-i)*20, msg.at(i).c_str());
     }
     if (cur_msg_frame_duration > 0) {
         cur_msg_frame_duration--;
