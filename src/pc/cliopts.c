@@ -83,10 +83,10 @@ void parse_cli_opts(int argc, char* argv[]) {
             game_exit();
         }
     }
-    if (idx_ip == 0 || idx_name == 0) {
-        printf("SM64AP: You need to at least specify Name and IP. Exiting.\n");
+    if (idx_name == 0) {
+        printf("SM64AP: You need to at least specify Name. Exiting.\n");
         fflush(stdout);
         game_exit();
     }
-    SM64AP_Init(argv[idx_ip], argv[idx_name], idx_passwd == 0 ? "" : argv[idx_passwd]);
+    SM64AP_Init(idx_ip == 0 ? "" : argv[idx_ip], argv[idx_name], idx_passwd == 0 ? "" : argv[idx_passwd]);
 }
