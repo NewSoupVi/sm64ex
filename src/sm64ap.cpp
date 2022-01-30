@@ -4,11 +4,13 @@
 extern "C" {
     #include "game/print.h"
     #include "gfx_dimensions.h"
+    #include "level_table.h"
 }
 
 #include <deque>
 #include <string>
 #include <vector>
+#include <map>
 
 int starsCollected = 0;
 bool sm64_locations[SM64AP_NUM_LOCS];
@@ -19,7 +21,12 @@ bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
 int sm64_starstofinish = 70;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
-int cur_msg_frame_duration = msg_frame_duration; 
+int cur_msg_frame_duration = msg_frame_duration;
+
+std::map<int,int> map_entrances;
+std::map<int,int> map_exits;
+std::map<int,int> map_courseidx_coursenum;
+std::map<int,int> map_coursenum_courseidx;
 
 void SM64AP_RecvItem(int idx) {
     switch (idx) {
@@ -44,6 +51,13 @@ void SM64AP_RecvItem(int idx) {
     }
 }
 
+void SM64AP_SetCourseMap(std::map<int,int> map) {
+    map_entrances = map;
+    for (int i = 0; i < map.size(); i++) {
+        map_exits[map_entrances.at(i)] = i;
+    }
+}
+
 void SM64AP_CheckLocation(int loc_id) {
     sm64_locations[loc_id - SM64AP_ID_OFFSET] = true;
 }
@@ -56,6 +70,94 @@ u32 SM64AP_CourseStarFlags(s32 courseIdx) {
         }
     }
     return starflags;
+}
+
+void setCourseNodeAndArea(int coursenum, s16* oldnode, s16* oldarea) {
+    bool isDeathWarp = *oldnode >= 64 || *oldnode == 0x0B;
+    switch (coursenum) {
+        case LEVEL_BOB:
+            *oldnode = isDeathWarp ? 0x64 : 0x32;
+            *oldarea = 0x01;
+            return;
+        case LEVEL_CCM:
+            *oldnode = isDeathWarp ? 0x65 : 0x33;
+            *oldarea = 0x01;
+            return;
+        case LEVEL_WF:
+            *oldnode = isDeathWarp ? 0x66 : 0x34;
+            *oldarea = 0x01;
+            return;
+        case LEVEL_JRB:
+            *oldnode = isDeathWarp ? 0x67 : 0x35;
+            *oldarea = 0x01;
+            return;
+        case LEVEL_BBH:
+            *oldnode = isDeathWarp ? 0x0B : 0x0A;
+            *oldarea = 0x01;
+            return;
+        case LEVEL_LLL:
+            *oldnode = isDeathWarp ? 0x64 : 0x32;
+            *oldarea = 0x03;
+            return;
+        case LEVEL_SSL:
+            *oldnode = isDeathWarp ? 0x65 : 0x33;
+            *oldarea = 0x03;
+            return;
+        case LEVEL_HMC:
+            *oldnode = isDeathWarp ? 0x66 : 0x34;
+            *oldarea = 0x03;
+            return;
+        case LEVEL_DDD:
+            *oldnode = isDeathWarp ? 0x67 : 0x35;
+            *oldarea = 0x03;
+            return;
+        case LEVEL_WDW:
+            *oldnode = isDeathWarp ? 0x64 : 0x32;
+            *oldarea = 0x02;
+            return;
+        case LEVEL_THI:
+            *oldnode = isDeathWarp ? 0x65 : 0x33;
+            *oldarea = 0x02;
+            return;
+        case LEVEL_TTM:
+            *oldnode = isDeathWarp ? 0x66 : 0x34;
+            *oldarea = 0x02;
+            return;
+        case LEVEL_TTC:
+            *oldnode = isDeathWarp ? 0x67 : 0x35;
+            *oldarea = 0x02;
+            return;
+        case LEVEL_SL:
+            *oldnode = isDeathWarp ? 0x68 : 0x36;
+            *oldarea = 0x02;
+            return;
+        case LEVEL_RR:
+            *oldnode = isDeathWarp ? 0x6C : 0x38;
+            *oldarea = 0x02;
+            return;
+        default:
+            return;
+    }
+}
+
+void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s16* curArea, s16* destArea, s16* destWarpNode) {
+    if ((*curLevel == LEVEL_CASTLE || *curLevel == LEVEL_CASTLE_COURTYARD) && map_coursenum_courseidx.count(*destLevel)) {
+        *destLevel = map_courseidx_coursenum.at(map_entrances.at(map_coursenum_courseidx.at(*destLevel)));
+        *destArea = 0x01;
+        *destWarpNode = 0x0A;
+        return;
+    }
+    
+    if ((*destLevel == LEVEL_CASTLE || *destLevel == LEVEL_CASTLE_COURTYARD) && map_coursenum_courseidx.count(*curLevel)) {
+        int exit = map_courseidx_coursenum.at(map_exits.at(map_coursenum_courseidx.at(*curLevel)));
+        if (exit == LEVEL_BBH) {
+            *destLevel = LEVEL_CASTLE_COURTYARD;
+        } else {
+            *destLevel = LEVEL_CASTLE;
+        }
+        setCourseNodeAndArea(exit, destWarpNode, destArea);
+        fflush(stdout);
+    }
 }
 
 void SM64AP_SetStarsToFinish(int amount) {
@@ -80,10 +182,32 @@ void SM64AP_Init(const char* ip, const char* player_name, const char* passwd) {
     }
 
     AP_Init(ip, "Super Mario 64", player_name, passwd);
+
     AP_SetItemClearCallback(&SM64AP_ResetItems);
     AP_SetLocationCheckedCallback(&SM64AP_CheckLocation);
     AP_SetItemRecvCallback(&SM64AP_RecvItem);
     AP_RegisterSlotDataIntCallback("StarsToFinish", &SM64AP_SetStarsToFinish);
+    AP_RegisterSlotDataMapIntIntCallback("AreaRando", &SM64AP_SetCourseMap);
+
+    map_courseidx_coursenum.insert(std::pair<int,int>(0,LEVEL_BOB));
+    map_courseidx_coursenum.insert(std::pair<int,int>(1,LEVEL_WF));
+    map_courseidx_coursenum.insert(std::pair<int,int>(2,LEVEL_JRB));
+    map_courseidx_coursenum.insert(std::pair<int,int>(3,LEVEL_CCM));
+    map_courseidx_coursenum.insert(std::pair<int,int>(4,LEVEL_BBH));
+    map_courseidx_coursenum.insert(std::pair<int,int>(5,LEVEL_HMC));
+    map_courseidx_coursenum.insert(std::pair<int,int>(6,LEVEL_LLL));
+    map_courseidx_coursenum.insert(std::pair<int,int>(7,LEVEL_SSL));
+    map_courseidx_coursenum.insert(std::pair<int,int>(8,LEVEL_DDD));
+    map_courseidx_coursenum.insert(std::pair<int,int>(9,LEVEL_SL));
+    map_courseidx_coursenum.insert(std::pair<int,int>(10,LEVEL_WDW));
+    map_courseidx_coursenum.insert(std::pair<int,int>(11,LEVEL_TTM));
+    map_courseidx_coursenum.insert(std::pair<int,int>(12,LEVEL_THI));
+    map_courseidx_coursenum.insert(std::pair<int,int>(13,LEVEL_TTC));
+    map_courseidx_coursenum.insert(std::pair<int,int>(14,LEVEL_RR));
+    for (int i = 0; i < map_courseidx_coursenum.size(); i++) {
+        map_coursenum_courseidx.insert(std::pair<int,int>(map_courseidx_coursenum.at(i),i));
+    }
+
     AP_Start();
 }
 
