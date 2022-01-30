@@ -5,6 +5,7 @@ extern "C" {
     #include "game/print.h"
     #include "gfx_dimensions.h"
     #include "level_table.h"
+    #include "game/level_update.h"
 }
 
 #include <deque>
@@ -48,6 +49,8 @@ void SM64AP_RecvItem(int idx) {
         case SM64AP_ITEMID_VANISHCAP:
             sm64_have_vanishcap = true;
             break;
+        case SM64AP_ITEMID_1UP:
+            gMarioState->numLives++;
     }
 }
 
@@ -140,7 +143,7 @@ void setCourseNodeAndArea(int coursenum, s16* oldnode, s16* oldarea) {
     }
 }
 
-void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s16* curArea, s16* destArea, s16* destWarpNode) {
+void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode) {
     if ((*curLevel == LEVEL_CASTLE || *curLevel == LEVEL_CASTLE_COURTYARD) && map_coursenum_courseidx.count(*destLevel)) {
         *destLevel = map_courseidx_coursenum.at(map_entrances.at(map_coursenum_courseidx.at(*destLevel)));
         *destArea = 0x01;
