@@ -152,6 +152,7 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
     }
     
     if ((*destLevel == LEVEL_CASTLE || *destLevel == LEVEL_CASTLE_COURTYARD) && map_coursenum_courseidx.count(*curLevel)) {
+        if (*destLevel == LEVEL_CASTLE && *destArea == 0x01 && *destWarpNode == 0x1F) return; //Exit Course
         if (*curLevel == LEVEL_COTMC) *curLevel = LEVEL_HMC;
         int exit = map_courseidx_coursenum.at(map_exits.at(map_coursenum_courseidx.at(*curLevel)));
         if (exit == LEVEL_BBH) {
