@@ -135,7 +135,7 @@ void setCourseNodeAndArea(int coursenum, s16* oldnode, s16* oldarea) {
             *oldarea = 0x02;
             return;
         case LEVEL_RR:
-            *oldnode = isDeathWarp ? 0x6C : 0x38;
+            *oldnode = isDeathWarp ? 0x6C : 0x3A;
             *oldarea = 0x02;
             return;
         default:
