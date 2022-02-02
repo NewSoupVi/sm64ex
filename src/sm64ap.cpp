@@ -34,19 +34,19 @@ void SM64AP_RecvItem(int idx) {
         case SM64AP_ITEMID_STAR:
             starsCollected++;
             break;
-        case SM64AP_ITEMID_KEY1:
+        case SM64AP_ID_KEY1:
             sm64_have_key1 = true;
             break;
-        case SM64AP_ITEMID_KEY2:
+        case SM64AP_ID_KEY2:
             sm64_have_key2 = true;
             break;
-        case SM64AP_ITEMID_WINGCAP:
+        case SM64AP_ID_WINGCAP:
             sm64_have_wingcap = true;
             break;
-        case SM64AP_ITEMID_METALCAP:
+        case SM64AP_ID_METALCAP:
             sm64_have_metalcap = true;
             break;
-        case SM64AP_ITEMID_VANISHCAP:
+        case SM64AP_ID_VANISHCAP:
             sm64_have_vanishcap = true;
             break;
         case SM64AP_ITEMID_1UP:
@@ -233,16 +233,12 @@ int SM64AP_StarsToFinish() {
     return sm64_starstofinish;
 }
 
-bool SM64AP_CheckedKey1() {
-    return sm64_locations[SM64AP_ITEMID_KEY1 - SM64AP_ID_OFFSET];
+bool SM64AP_CheckedLoc(int x) {
+    return sm64_locations[x - SM64AP_ID_OFFSET];
 }
 
 bool SM64AP_HaveKey1() {
     return sm64_have_key1;
-}
-
-bool SM64AP_CheckedKey2() {
-    return sm64_locations[SM64AP_ITEMID_KEY2 - SM64AP_ID_OFFSET];
 }
 
 bool SM64AP_HaveKey2() {
