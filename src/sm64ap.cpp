@@ -40,6 +40,9 @@ void SM64AP_RecvItem(int idx) {
         case SM64AP_ID_KEY2:
             sm64_have_key2 = true;
             break;
+        case SM64AP_ID_KEYPROG:
+            sm64_have_key2 = sm64_have_key1;
+            sm64_have_key1 = true;
         case SM64AP_ID_WINGCAP:
             sm64_have_wingcap = true;
             break;
