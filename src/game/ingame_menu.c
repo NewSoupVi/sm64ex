@@ -1,5 +1,8 @@
 #include <ultra64.h>
 
+#include "sm64ap.h"
+#include "hud.h"
+
 #include "actors/common1.h"
 #include "area.h"
 #include "audio/external.h"
@@ -2461,6 +2464,14 @@ void print_hud_pause_colorful_str(void) {
                          SCREEN_WIDTH / 2, textPause, 12.0f), 81, textPause);
 #else
     print_hud_lut_string(HUD_LUT_GLOBAL, 123, 81, textPause);
+
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78), 209-20, "KEYS");
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78), 209-35, SM64AP_HaveKey1() ? "Y" : "N");
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78)+13, 209-35, SM64AP_HaveKey2() ? "Y" : "N");
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78), 209-35-20, "CAPS");
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78), 209-70, SM64AP_HaveCap(2) ? "Y" : "N");
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78)+13, 209-70, SM64AP_HaveCap(4) ? "Y" : "N");
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78)+26, 209-70, SM64AP_HaveCap(8) ? "Y" : "N");
 #endif
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
