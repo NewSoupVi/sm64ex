@@ -24,6 +24,9 @@ int sm64_starstofinish = 70;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration;
 
+//HACK: Alternate THI Size
+bool thihuge = true;
+
 std::map<int,int> map_entrances;
 std::map<int,int> map_exits;
 std::map<int,int> map_courseidx_coursenum;
@@ -150,7 +153,14 @@ void setCourseNodeAndArea(int coursenum, s16* oldnode, s16* oldarea) {
 void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode) {
     if ((*curLevel == LEVEL_CASTLE || *curLevel == LEVEL_CASTLE_COURTYARD) && map_coursenum_courseidx.count(*destLevel)) {
         *destLevel = map_courseidx_coursenum.at(map_entrances.at(map_coursenum_courseidx.at(*destLevel)));
-        *destArea = 0x01;
+        if (thihuge && *destLevel == LEVEL_THI) {
+            *destArea = 0x02;
+            thihuge = !thihuge;
+        } else {
+            *destArea = 0x01;
+            thihuge = *destLevel == LEVEL_THI ? !thihuge : thihuge;
+        }
+        *destArea = *destLevel == LEVEL_THI && thihuge ? 0x02 : 0x01;
         *destWarpNode = 0x0A;
         return;
     }
