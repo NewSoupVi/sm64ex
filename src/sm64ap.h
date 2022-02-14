@@ -33,6 +33,9 @@ extern "C" bool SM64AP_CheckedLoc(int);
 extern "C" bool SM64AP_HaveKey1();
 extern "C" bool SM64AP_HaveKey2();
 extern "C" bool SM64AP_HaveCap(int);
+extern "C" bool SM64AP_DeathLinkPending();
+extern "C" void SM64AP_DeathLinkClear();
+extern "C" void SM64AP_DeathLinkSend();
 
 // Send Item
 extern "C" void SM64AP_SendItem(int);
@@ -52,6 +55,9 @@ bool SM64AP_CheckedLoc(int);
 bool SM64AP_HaveKey1();
 bool SM64AP_HaveKey2();
 bool SM64AP_HaveCap(int);
+bool SM64AP_DeathLinkPending();
+void SM64AP_DeathLinkClear();
+void SM64AP_DeathLinkSend();
 void SM64AP_SendItem(int);
 void SM64AP_PrintNext();
 void SM64AP_StoryComplete();

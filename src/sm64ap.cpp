@@ -32,6 +32,8 @@ std::map<int,int> map_exits;
 std::map<int,int> map_courseidx_coursenum;
 std::map<int,int> map_coursenum_courseidx;
 
+void none() {};
+
 void SM64AP_RecvItem(int idx) {
     switch (idx) {
         case SM64AP_ITEMID_STAR:
@@ -202,6 +204,8 @@ void SM64AP_Init(const char* ip, const char* player_name, const char* passwd) {
 
     AP_Init(ip, "Super Mario 64", player_name, passwd);
 
+    AP_SetDeathLinkSupported(true);
+    AP_SetDeathLinkRecvCallback(&none);
     AP_SetItemClearCallback(&SM64AP_ResetItems);
     AP_SetLocationCheckedCallback(&SM64AP_CheckLocation);
     AP_SetItemRecvCallback(&SM64AP_RecvItem);
@@ -276,16 +280,20 @@ bool SM64AP_HaveCap(int flag) {
     }
 }
 
-bool SM64AP_DeathLinkRecv() {
-    return false;
+bool SM64AP_DeathLinkPending() {
+    return AP_DeathLinkPending();
 }
 
 void SM64AP_DeathLinkClear() {
-
+    AP_DeathLinkClear();
 }
 
 void SM64AP_DeathLinkSend() {
-
+    if (!SM64AP_DeathLinkPending()) {
+        return AP_DeathLinkSend();
+    } else {
+        SM64AP_DeathLinkClear();
+    }
 }
 
 void SM64AP_PrintNext() {

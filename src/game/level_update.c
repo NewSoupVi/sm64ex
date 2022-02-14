@@ -938,6 +938,10 @@ void update_hud_values(void) {
         }
         gHudDisplay.wedges = numHealthWedges;
 
+        if (SM64AP_DeathLinkPending()) {
+            gMarioState->health = 0xFF;
+        }
+
         if (gMarioState->hurtCounter > 0) {
             gHudDisplay.flags |= HUD_DISPLAY_FLAG_EMPHASIZE_POWER;
         } else {
