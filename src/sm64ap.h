@@ -17,7 +17,9 @@ extern "C" {
 #define SM64AP_ID_VANISHCAP (SM64AP_ID_METALCAP+1)
 #define SM64AP_ITEMID_1UP (SM64AP_ID_VANISHCAP+1)
 
-#define SM64AP_NUM_LOCS 183
+#define SM64AP_ID_CANNONUNLOCK(x) (SM64AP_ID_OFFSET+200+x)
+
+#define SM64AP_NUM_LOCS 215
 
 
 #ifdef __cplusplus
@@ -33,6 +35,7 @@ extern "C" bool SM64AP_CheckedLoc(int);
 extern "C" bool SM64AP_HaveKey1();
 extern "C" bool SM64AP_HaveKey2();
 extern "C" bool SM64AP_HaveCap(int);
+extern "C" bool SM64AP_HaveCannon(int);
 extern "C" bool SM64AP_DeathLinkPending();
 extern "C" void SM64AP_DeathLinkClear();
 extern "C" void SM64AP_DeathLinkSend();
@@ -55,6 +58,7 @@ bool SM64AP_CheckedLoc(int);
 bool SM64AP_HaveKey1();
 bool SM64AP_HaveKey2();
 bool SM64AP_HaveCap(int);
+bool SM64AP_HaveCannon(int);
 bool SM64AP_DeathLinkPending();
 void SM64AP_DeathLinkClear();
 void SM64AP_DeathLinkSend();

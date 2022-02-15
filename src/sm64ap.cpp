@@ -20,6 +20,8 @@ bool sm64_have_key2 = false;
 bool sm64_have_wingcap = false;
 bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
+bool sm64_enablecannonchecks = true; //Default true so that noone cheats with disconnects
+bool sm64_have_cannon[15];
 int sm64_starstofinish = 70;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration;
@@ -60,13 +62,10 @@ void SM64AP_RecvItem(int idx) {
             break;
         case SM64AP_ITEMID_1UP:
             gMarioState->numLives++;
-    }
-}
-
-void SM64AP_SetCourseMap(std::map<int,int> map) {
-    map_entrances = map;
-    for (int i = 0; i < map.size(); i++) {
-        map_exits[map_entrances.at(i)] = i;
+            break;
+        case SM64AP_ID_CANNONUNLOCK(0) ... SM64AP_ID_CANNONUNLOCK(15-1):
+            sm64_have_cannon[idx-SM64AP_ID_OFFSET-200] = true;
+            break;
     }
 }
 
@@ -185,9 +184,19 @@ void SM64AP_SetStarsToFinish(int amount) {
     sm64_starstofinish = amount;
 }
 
+void SM64AP_SetCourseMap(std::map<int,int> map) {
+    map_entrances = map;
+    for (int i = 0; i < map.size(); i++) {
+        map_exits[map_entrances.at(i)] = i;
+    }
+}
+
 void SM64AP_ResetItems() {
     for (int i = 0; i < SM64AP_NUM_LOCS; i++) {
         sm64_locations[i] = false;
+    }
+    for (int i = 0; i < 15; i++) {
+        sm64_have_cannon[i] = false;
     }
     sm64_have_key1 = false;
     sm64_have_key2 = false;
@@ -278,6 +287,11 @@ bool SM64AP_HaveCap(int flag) {
             //Probably coin/1up or something
             return true;
     }
+}
+
+bool SM64AP_HaveCannon(int courseIdx) {
+    if (courseIdx < 15) return sm64_have_cannon[courseIdx];
+    return false;
 }
 
 bool SM64AP_DeathLinkPending() {
