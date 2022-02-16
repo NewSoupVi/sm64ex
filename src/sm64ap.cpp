@@ -20,7 +20,6 @@ bool sm64_have_key2 = false;
 bool sm64_have_wingcap = false;
 bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
-bool sm64_enablecannonchecks = true; //Default true so that noone cheats with disconnects
 bool sm64_have_cannon[15];
 int sm64_starstofinish = 70;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
