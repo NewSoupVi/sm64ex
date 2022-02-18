@@ -21,6 +21,7 @@ bool sm64_have_wingcap = false;
 bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
 bool sm64_have_cannon[15];
+int* sm64_clockaction;
 int sm64_starstofinish = 70;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration;
@@ -152,6 +153,7 @@ void setCourseNodeAndArea(int coursenum, s16* oldnode, s16* oldarea) {
 
 void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode) {
     if ((*curLevel == LEVEL_CASTLE || *curLevel == LEVEL_CASTLE_COURTYARD) && map_coursenum_courseidx.count(*destLevel)) {
+        *sm64_clockaction = 5;
         *destLevel = map_courseidx_coursenum.at(map_entrances.at(map_coursenum_courseidx.at(*destLevel)));
         if (thihuge && *destLevel == LEVEL_THI) {
             *destArea = 0x02;
@@ -177,6 +179,20 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
         setCourseNodeAndArea(exit, destWarpNode, destArea);
         fflush(stdout);
     }
+}
+
+int SM64AP_CourseToTTC() {
+    int i = 0;
+    for (i = 0; i < 15; i++) {
+        if (map_courseidx_coursenum.at(map_entrances.at(i)) == LEVEL_TTC) {
+            break;
+        }
+    }
+    return i;
+}
+
+void SM64AP_SetClockToTTCAction(int* action) {
+    sm64_clockaction = action;
 }
 
 void SM64AP_SetStarsToFinish(int amount) {
@@ -290,7 +306,7 @@ bool SM64AP_HaveCap(int flag) {
 
 bool SM64AP_HaveCannon(int courseIdx) {
     if (courseIdx < 15) return sm64_have_cannon[courseIdx];
-    return false;
+    return true;
 }
 
 bool SM64AP_DeathLinkPending() {
