@@ -153,7 +153,7 @@ void setCourseNodeAndArea(int coursenum, s16* oldnode, s16* oldarea) {
 
 void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode) {
     if ((*curLevel == LEVEL_CASTLE || *curLevel == LEVEL_CASTLE_COURTYARD) && map_coursenum_courseidx.count(*destLevel)) {
-        *sm64_clockaction = 5;
+        if (sm64_clockaction) *sm64_clockaction = 5;
         *destLevel = map_courseidx_coursenum.at(map_entrances.at(map_coursenum_courseidx.at(*destLevel)));
         if (thihuge && *destLevel == LEVEL_THI) {
             *destArea = 0x02;
