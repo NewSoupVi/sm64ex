@@ -293,7 +293,7 @@ EXE := $(BUILD_DIR)/$(TARGET).html
 	else
 	ifeq ($(WINDOWS_BUILD),1)
 		EXE := $(BUILD_DIR)/$(TARGET).exe
-		CMAKE_WIN_BUILD_FLAG := -DMINGW=1 -DWIN32=1 -DUSE_ZLIB=OFF
+		CMAKE_WIN_BUILD_FLAG := -DMINGW=1 -DWIN32=1 -DUSE_ZLIB=OFF -G"MSYS Makefiles"
 		else # Linux builds/binary namer
 		ifeq ($(TARGET_RPI),1)
 			EXE := $(BUILD_DIR)/$(TARGET).arm
@@ -1015,7 +1015,7 @@ $(BUILD_DIR)/%.o: %.s
 	$(AS) $(ASFLAGS) -MD $(BUILD_DIR)/$*.d -o $@ $<
 
 lib/APCpp/build/libAPCpp.dll:
-	cd lib/APCpp && mkdir -p build && cd build && CXX=$(CXX) cmake .. $(CMAKE_WIN_BUILD_FLAG) -G"MSYS Makefiles" && CXX=$(CXX) $(MAKE)
+	cd lib/APCpp && mkdir -p build && cd build && CXX=$(CXX) cmake .. $(CMAKE_WIN_BUILD_FLAG) && CXX=$(CXX) $(MAKE)
 
 $(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(BUILD_DIR)/$(RPC_LIBS) lib/APCpp/build/libAPCpp.dll
 	$(LD) -static -static-libgcc -static-libstdc++ -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) lib/APCpp/build/libAPCpp.dll -Wl,-rpath,. 
