@@ -91,13 +91,7 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
 }
 
 int SM64AP_CourseToTTC() {
-    int i = 0;
-    for (i = 0; i < 15; i++) {
-        if (map_courseidx_coursenum.at(map_entrances.at(i)) == LEVEL_TTC) {
-            break;
-        }
-    }
-    return i;
+    return 13;
 }
 
 void SM64AP_SetClockToTTCAction(int* action) {
