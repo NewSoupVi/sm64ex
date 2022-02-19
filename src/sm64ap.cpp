@@ -21,7 +21,7 @@ bool sm64_have_wingcap = false;
 bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
 bool sm64_have_cannon[15];
-int* sm64_clockaction;
+int* sm64_clockaction = nullptr;
 int sm64_starstofinish = 70;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration;
