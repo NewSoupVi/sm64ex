@@ -667,7 +667,7 @@ s32 save_file_is_cannon_unlocked(void) {
  * Sets the cannon status to unlocked in the current course.
  */
 void save_file_set_cannon_unlocked(void) {
-    SM64AP_SendItem(200 + gCurrCourseNum - 1);
+    if (gCurrCourseNum <= 15 ) SM64AP_SendItem(200 + gCurrCourseNum - 1);
     gSaveBuffer.files[gCurrSaveFileNum - 1][0].courseStars[gCurrCourseNum] |= 0x80;
     gSaveBuffer.files[gCurrSaveFileNum - 1][0].flags |= SAVE_FLAG_FILE_EXISTS;
     gSaveFileModified = TRUE;
