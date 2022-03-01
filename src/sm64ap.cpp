@@ -36,7 +36,7 @@ std::map<int,int> map_coursenum_courseidx;
 
 void none() {};
 
-void SM64AP_RecvItem(int idx) {
+void SM64AP_RecvItem(int idx, bool notify) {
     switch (idx) {
         case SM64AP_ITEMID_STAR:
             starsCollected++;
