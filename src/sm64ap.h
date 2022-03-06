@@ -24,7 +24,8 @@ extern "C" {
 
 #ifdef __cplusplus
 //Init
-extern "C" void SM64AP_Init(const char*, const char*, const char*);
+extern "C" void SM64AP_InitMW(const char*, const char*, const char*);
+extern "C" void SM64AP_InitSP(const char*);
 
 // Local Stars, Keys and Caps
 extern "C" int SM64AP_GetStars();
@@ -51,7 +52,8 @@ extern "C" void SM64AP_PrintNext();
 // Called when Story completed, sends StatusUpdate
 extern "C" void SM64AP_StoryComplete();
 #else
-void SM64AP_Init(const char*, const char*, const char*);
+void SM64AP_InitMW(const char*, const char*, const char*);
+void SM64AP_InitSP(const char*);
 int SM64AP_GetStars();
 int SM64AP_StarsToFinish();
 u32 SM64AP_CourseStarFlags(s32);

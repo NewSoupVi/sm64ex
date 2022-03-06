@@ -221,13 +221,7 @@ void SM64AP_ResetItems() {
     starsCollected = 0;
 }
 
-void SM64AP_Init(const char* ip, const char* player_name, const char* passwd) {
-    if (AP_IsInit()) {
-        return;
-    }
-
-    AP_Init(ip, "Super Mario 64", player_name, passwd);
-
+void SM64AP_GenericInit() {
     AP_SetDeathLinkSupported(true);
     AP_SetDeathLinkRecvCallback(&none);
     AP_SetItemClearCallback(&SM64AP_ResetItems);
@@ -255,7 +249,17 @@ void SM64AP_Init(const char* ip, const char* player_name, const char* passwd) {
         map_coursenum_courseidx.insert(std::pair<int,int>(map_courseidx_coursenum.at(i),i));
     }
     map_coursenum_courseidx.insert(std::pair<int,int>(LEVEL_COTMC,5)); //Map COTMC to HMC
+}
 
+void SM64AP_InitMW(const char* ip, const char* player_name, const char* passwd) {
+    AP_Init(ip, "Super Mario 64", player_name, passwd);
+    SM64AP_GenericInit();
+    AP_Start();
+}
+
+void SM64AP_InitSP(const char * filename) {
+    AP_Init(filename);
+    SM64AP_GenericInit();
     AP_Start();
 }
 
